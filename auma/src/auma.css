@@ -1,0 +1,40 @@
+.auma {
+  margin: 0 auto;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #eee;
+}
+
+.auma,
+.auma * {
+  box-sizing: border-box;
+}
+
+.auma > * + * {
+  margin-top: 1.5rem;
+}
+
+.auma .play-bar {
+  min-height: 2rem;
+}
+
+.auma img,
+.auma .img-placeholder {
+  max-width: 100%;
+  width: 300px;
+  aspect-ratio: 1;
+}
+
+.auma .img-placeholder {
+  background-color: #eee;
+}
+
+.auma .options {
+  width: 100%;
+  min-height: 2rem;
+  display: flex;
+  justify-content: space-evenly;
+}
