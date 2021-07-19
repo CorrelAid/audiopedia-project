@@ -24,6 +24,8 @@ const App = {
   },
 };
 
+let surveyControls;
+
 const Survey = {
   template: `
 <template v-if="currentQuestion">
@@ -77,7 +79,7 @@ const Survey = {
     },
   },
   mounted() {
-    window.aumaSurveyControls = {
+    surveyControls = {
       play: this.play,
       pause: this.pause,
       setImageUrl: this.setImageUrl,
@@ -95,7 +97,7 @@ const Survey = {
       for (let i = Math.ceil(this.time); i <= Math.floor(time); i++) {
         const callback = (this.currentQuestion.callbacks || {})[i];
         if (callback) {
-          callback(window.aumaSurveyControls);
+          callback(surveyControls);
         }
       }
       this.time = time;
@@ -105,7 +107,7 @@ const Survey = {
       this.playing = false;
       const callback = (this.currentQuestion.callbacks || {}).END;
       if (callback) {
-        callback(window.aumaSurveyControls);
+        callback(surveyControls);
       }
     },
     play() {
@@ -155,7 +157,7 @@ const Survey = {
         question: this.currentQuestion.id,
         option: option.id,
       });
-      option.callback(window.aumaSurveyControls);
+      option.callback(surveyControls);
     },
     submit() {
       this.$emit("submit", this.results);
