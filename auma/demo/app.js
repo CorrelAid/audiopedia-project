@@ -1,40 +1,69 @@
 auma({
   questions: [
     {
-      name: "start",
-      audioUrl: "/mp3/1.mp3",
-      imageUrl: "/img/start.gif",
+      id: "cats-or-dogs",
+      audioUrl: "/mp3/do-you-prefer-cats-or-dogs.mp3",
+      imageUrl: "/img/cat-dog.jpg",
       callbacks: {
-        1: (controls) => controls.setImageUrl("/img/1.gif"),
-        7: (controls) => controls.setImageUrl("/img/2.png"),
-        23: (controls) => controls.setImageUrl("/img/3.gif"),
         END: (controls) =>
           controls.setOptions([
             {
-              name: "blue",
-              callback: (controls) => controls.setQuestionAndPlay("blue"),
+              id: "cats",
+              callback: (controls) => controls.setQuestionAndPlay("hair-color"),
             },
             {
-              name: "green",
-              callback: (controls) => controls.setQuestionAndPlay("green"),
+              id: "dogs",
+              callback: (controls) => controls.setQuestionAndPlay("hair-color"),
             },
           ]),
       },
     },
     {
-      name: "blue",
-      audioUrl: "/mp3/blue.mp3",
-      imageUrl: "/img/5.png",
+      id: "hair-color",
+      audioUrl: "/mp3/what-is-your-hair-color.mp3",
+      imageUrl: "/img/hair-color.jpg",
       callbacks: {
-        END: (controls) => controls.submit(),
+        END: (controls) =>
+          controls.setOptions([
+            {
+              id: "blonde",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("feeling-stressed"),
+            },
+            {
+              id: "red",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("feeling-stressed"),
+            },
+            {
+              id: "brown",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("feeling-stressed"),
+            },
+            {
+              id: "black",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("feeling-stressed"),
+            },
+          ]),
       },
     },
     {
-      name: "green",
-      audioUrl: "/mp3/green.mp3",
-      imageUrl: "/img/4.png",
+      id: "feeling-stressed",
+      audioUrl: "/mp3/are-you-feeling-stressed.mp3",
+      imageUrl: "/img/stressed.jpg",
       callbacks: {
-        END: (controls) => controls.submit(),
+        END: (controls) =>
+          controls.setOptions([
+            {
+              id: "not-stressed",
+              callback: (controls) => controls.submit(),
+            },
+            {
+              id: "very-stressed",
+              callback: (controls) => controls.submit(),
+            },
+          ]),
       },
     },
   ],

@@ -1,44 +1,67 @@
 import "./auma.css";
 
-let controls;
-
 const App = {
   template: `
 <div class="auma">
-  <template v-if="currentQuestion">
-  <audio 
-    ref="audio" 
-    :src="currentQuestion.audioUrl"
-    @timeupdate="tick"
-    @ended="ended"
-  ></audio>
-
-  <div class="play-bar">
-    <button 
-      v-if="showPlayPause" @click="playing ? pause() : play()"
-    >{{ playing ? 'pause' : 'play' }}</button>
-  </div>
-
-  <img v-if="imageUrl" :src="imageUrl">
-  <div v-if="imageUrl == undefined" class="img-placeholder"></div>
-
-  <div class="options">
-    <button 
-      class="option" 
-      v-for="option of options" 
-      @click="choose(option)" 
-      :key="currentQuestion.name + option.name"
-    >{{ option.name }}</button>
-  </div>
-  </template>
-</div>
-
-<pre>{{ JSON.stringify({results}, null, 2) }}</pre>
-<pre>{{ JSON.stringify({playing, time}, null, 2) }}</pre>
-`,
+  <survey v-if="view == 'survey'" :questions="questions" @submit="handleSurveySubmit"></survey>
+  <results v-if="view == 'results'" :results="results"></results>
+</div>`,
   data() {
     return {
+      view: "init",
       questions: [],
+      results: [],
+    };
+  },
+  methods: {
+    start() {
+      this.view = "survey";
+    },
+    handleSurveySubmit(results) {
+      this.results = results;
+      this.view = "results";
+    },
+  },
+};
+
+const Survey = {
+  template: `
+<template v-if="currentQuestion">
+<audio 
+  ref="audio" 
+  :src="currentQuestion.audioUrl"
+  @timeupdate="tick"
+  @ended="ended"
+></audio>
+
+<div class="play-bar">
+  <button 
+    v-if="showPlayPause" @click="playing ? pause() : play()"
+  >{{ playing ? 'pause' : 'play' }}</button>
+</div>
+
+<img v-if="imageUrl !== undefined" :src="imageUrl">
+<div v-if="imageUrl == undefined" class="img-placeholder"></div>
+
+<div class="options">
+  <button 
+    class="option" 
+    v-for="option of options" 
+    @click="choose(option)" 
+    :key="currentQuestion.id + option.id"
+  >{{ option.id }}</button>
+</div>
+</template>
+
+<pre>{{ JSON.stringify({playing, time}, null, 2) }}</pre>
+<pre>{{ JSON.stringify({results}, null, 2) }}</pre>
+`,
+  props: {
+    questions: Array,
+  },
+  emits: ["submit"],
+  data() {
+    return {
       currentQuestionIdx: -1,
       showPlayPause: false,
       playing: false,
@@ -50,10 +73,21 @@ const App = {
   },
   computed: {
     currentQuestion() {
-      return this.currentQuestionIdx >= 0
-        ? this.questions[this.currentQuestionIdx]
-        : undefined;
+      return this.questions[this.currentQuestionIdx];
     },
+  },
+  mounted() {
+    window.aumaSurveyControls = {
+      play: this.play,
+      pause: this.pause,
+      setImageUrl: this.setImageUrl,
+      clearImageUrl: this.clearImageUrl,
+      setQuestion: this.setQuestion,
+      setQuestionAndPlay: this.setQuestionAndPlay,
+      setOptions: this.setOptions,
+      submit: this.submit,
+    };
+    this.setQuestion(0);
   },
   methods: {
     tick() {
@@ -61,7 +95,7 @@ const App = {
       for (let i = Math.ceil(this.time); i <= Math.floor(time); i++) {
         const callback = (this.currentQuestion.callbacks || {})[i];
         if (callback) {
-          callback(controls);
+          callback(window.aumaSurveyControls);
         }
       }
       this.time = time;
@@ -71,7 +105,7 @@ const App = {
       this.playing = false;
       const callback = (this.currentQuestion.callbacks || {}).END;
       if (callback) {
-        callback(controls);
+        callback(window.aumaSurveyControls);
       }
     },
     play() {
@@ -88,13 +122,13 @@ const App = {
     clearImageUrl() {
       this.imageUrl = undefined;
     },
-    setQuestion(nameOrIdx) {
-      if (typeof nameOrIdx == "string") {
+    setQuestion(idOrIdx) {
+      if (typeof idOrIdx == "string") {
         this.currentQuestionIdx = this.questions
-          .map((q) => q.name)
-          .indexOf(nameOrIdx);
+          .map((q) => q.id)
+          .indexOf(idOrIdx);
       } else {
-        this.currentQuestionIdx = nameOrIdx;
+        this.currentQuestionIdx = idOrIdx;
       }
 
       const question = this.questions[this.currentQuestionIdx];
@@ -106,8 +140,8 @@ const App = {
       this.playing = false;
       this.time = 0;
     },
-    setQuestionAndPlay(nameOrIdx) {
-      this.setQuestion(nameOrIdx);
+    setQuestionAndPlay(idOrIdx) {
+      this.setQuestion(idOrIdx);
       this.$nextTick(this.play);
     },
     setOptions(options) {
@@ -118,16 +152,28 @@ const App = {
     choose(option) {
       this.options = [];
       this.results.push({
-        question: this.currentQuestion.name,
-        option: option.name,
+        question: this.currentQuestion.id,
+        option: option.id,
       });
-      option.callback(controls);
+      option.callback(window.aumaSurveyControls);
     },
     submit() {
-      // proxy to object
-      const results = JSON.parse(JSON.stringify(this.results));
-      console.log(results);
+      this.$emit("submit", this.results);
     },
+  },
+};
+
+const Results = {
+  template: `
+<pre>{{ JSON.stringify({results}, null, 2) }}</pre>
+`,
+  props: {
+    results: Array,
+  },
+  mounted() {
+    // "proxy to object"
+    const results = JSON.parse(JSON.stringify(this.results));
+    console.log(results);
   },
 };
 
@@ -138,20 +184,14 @@ function auma({ questions }) {
   vue.onload = () => {
     const el = document.createElement("div");
     document.body.append(el);
-    const vm = Vue.createApp(App).mount(el);
-    vm.questions = questions;
-    vm.setQuestion(0);
 
-    controls = {
-      play: vm.play,
-      pause: vm.pause,
-      setImageUrl: vm.setImageUrl,
-      clearImageUrl: vm.clearImageUrl,
-      setQuestion: vm.setQuestion,
-      setQuestionAndPlay: vm.setQuestionAndPlay,
-      setOptions: vm.setOptions,
-      submit: vm.submit,
-    };
+    const vm = Vue.createApp(App)
+      .component("survey", Survey)
+      .component("results", Results)
+      .mount(el);
+
+    vm.questions = questions;
+    vm.start();
   };
 
   document.head.append(vue);
