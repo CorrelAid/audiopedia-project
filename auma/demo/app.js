@@ -1,4 +1,6 @@
 auma({
+  id: "my-survey",
+  whatsappResults: "12345678910", // put a real phone number here
   questions: [
     {
       id: "cats-or-dogs",
