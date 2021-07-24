@@ -3,12 +3,23 @@ import "./auma.css";
 const App = {
   template: `
 <div class="auma">
-  <survey v-if="view == 'survey'" :questions="questions" @submit="handleSurveySubmit"></survey>
-  <results v-if="view == 'results'" :results="results"></results>
+  <survey 
+    v-if="view == 'survey'" 
+    :questions="questions" 
+    @submit="handleSurveySubmit"
+  ></survey>
+  <results 
+    v-if="view == 'results'" 
+    :id="id"
+    :whatsappResults="whatsappResults" 
+    :results="results"
+  ></results>
 </div>`,
   data() {
     return {
       view: "init",
+      id: undefined,
+      whatsappResults: undefined,
       questions: [],
       results: [],
     };
@@ -167,9 +178,12 @@ const Survey = {
 
 const Results = {
   template: `
+<a :href="sendResultsURL" target="_blank">Send your results</a>
 <pre>{{ JSON.stringify({results}, null, 2) }}</pre>
 `,
   props: {
+    id: String,
+    whatsappResults: String,
     results: Array,
   },
   mounted() {
@@ -177,9 +191,18 @@ const Results = {
     const results = JSON.parse(JSON.stringify(this.results));
     console.log(results);
   },
+  computed: {
+    sendResultsURL() {
+      const phoneNumber = this.whatsappResults;
+      const text = encodeURIComponent(
+        JSON.stringify({ id: this.id, results: this.results })
+      );
+      return `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${text}`;
+    },
+  },
 };
 
-function auma({ questions }) {
+function auma({ id, whatsappResults, questions }) {
   const vue = document.createElement("script");
   vue.src = "https://unpkg.com/vue@3";
 
@@ -192,7 +215,9 @@ function auma({ questions }) {
       .component("results", Results)
       .mount(el);
 
+    vm.id = id;
     vm.questions = questions;
+    vm.whatsappResults = whatsappResults;
     vm.start();
   };
 
