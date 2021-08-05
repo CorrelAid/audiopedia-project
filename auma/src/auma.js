@@ -193,10 +193,14 @@ const Results = {
   },
   computed: {
     sendResultsURL() {
-      const text = encodeURIComponent(
-        JSON.stringify({ id: this.id, results: this.results })
+      const text = JSON.stringify(
+        { id: this.id, results: this.results },
+        null,
+        2
       );
-      return `https://api.whatsapp.com/send?phone=${this.sendResultsTo}&text=${text}`;
+      return `https://api.whatsapp.com/send?phone=${
+        this.sendResultsTo
+      }&text=${encodeURIComponent(text)}`;
     },
   },
 };
