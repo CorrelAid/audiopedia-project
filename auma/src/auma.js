@@ -11,7 +11,7 @@ const App = {
   <results 
     v-if="view == 'results'" 
     :id="id"
-    :whatsappResults="whatsappResults" 
+    :sendResultsTo="sendResultsTo" 
     :results="results"
   ></results>
 </div>`,
@@ -19,7 +19,7 @@ const App = {
     return {
       view: "init",
       id: undefined,
-      whatsappResults: undefined,
+      sendResultsTo: undefined,
       questions: [],
       results: [],
     };
@@ -183,7 +183,7 @@ const Results = {
 `,
   props: {
     id: String,
-    whatsappResults: String,
+    sendResultsTo: String,
     results: Array,
   },
   mounted() {
@@ -193,16 +193,15 @@ const Results = {
   },
   computed: {
     sendResultsURL() {
-      const phoneNumber = this.whatsappResults;
       const text = encodeURIComponent(
         JSON.stringify({ id: this.id, results: this.results })
       );
-      return `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${text}`;
+      return `https://api.whatsapp.com/send?phone=${this.sendResultsTo}&text=${text}`;
     },
   },
 };
 
-function auma({ id, whatsappResults, questions }) {
+function auma({ id, questions, sendResultsTo }) {
   const vue = document.createElement("script");
   vue.src = "https://unpkg.com/vue@3";
 
@@ -217,7 +216,9 @@ function auma({ id, whatsappResults, questions }) {
 
     vm.id = id;
     vm.questions = questions;
-    vm.whatsappResults = whatsappResults;
+    vm.sendResultsTo =
+      new URLSearchParams(window.location.search).get("sendResultsTo") ||
+      sendResultsTo;
     vm.start();
   };
 
