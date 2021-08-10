@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
+  padding: 1.5rem;
   border: 1px solid #eee;
 }
 
@@ -13,12 +13,16 @@
   box-sizing: border-box;
 }
 
+.auma > * {
+  margin-top: 0;
+}
+
 .auma > * + * {
   margin-top: 1.5rem;
 }
 
 .auma .play-bar {
-  min-height: 2rem;
+  min-height: 48px;
 }
 
 .auma .play-bar button {
@@ -39,7 +43,13 @@
 
 .auma .options {
   width: 100%;
-  min-height: 2rem;
+  min-height: 48px;
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
+}
+
+.auma .options button {
+  border: none;
+  background-color: transparent;
 }

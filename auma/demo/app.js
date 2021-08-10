@@ -11,10 +11,12 @@ auma({
           controls.setOptions([
             {
               id: "cats",
+              icon: "cat",
               callback: (controls) => controls.setQuestionAndPlay("hair-color"),
             },
             {
               id: "dogs",
+              icon: "dog",
               callback: (controls) => controls.setQuestionAndPlay("hair-color"),
             },
           ]),
@@ -29,21 +31,25 @@ auma({
           controls.setOptions([
             {
               id: "blonde",
+              icon: "unknown",
               callback: (controls) =>
                 controls.setQuestionAndPlay("feeling-stressed"),
             },
             {
               id: "red",
+              icon: "unknown",
               callback: (controls) =>
                 controls.setQuestionAndPlay("feeling-stressed"),
             },
             {
               id: "brown",
+              icon: "unknown",
               callback: (controls) =>
                 controls.setQuestionAndPlay("feeling-stressed"),
             },
             {
               id: "black",
+              icon: "unknown",
               callback: (controls) =>
                 controls.setQuestionAndPlay("feeling-stressed"),
             },
@@ -59,10 +65,12 @@ auma({
           controls.setOptions([
             {
               id: "not-stressed",
+              icon: "unknown",
               callback: (controls) => controls.submit(),
             },
             {
               id: "very-stressed",
+              icon: "unknown",
               callback: (controls) => controls.submit(),
             },
           ]),

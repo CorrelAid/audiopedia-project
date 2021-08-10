@@ -1,4 +1,4 @@
-import { IconPlay, IconPause, IconReplay } from "./icons";
+import * as Icons from "./icons";
 
 import "./auma.css";
 
@@ -42,12 +42,6 @@ let surveyControls;
 const Survey = {
   template: `
 <template v-if="currentQuestion">
-<audio 
-  ref="audio" 
-  :src="currentQuestion.audioUrl"
-  @timeupdate="tick"
-  @ended="ended"
-></audio>
 
 <div class="play-bar">
   <button 
@@ -63,6 +57,13 @@ const Survey = {
   </button>
 </div>
 
+<audio 
+  ref="audio" 
+  :src="currentQuestion.audioUrl"
+  @timeupdate="tick"
+  @ended="ended"
+></audio>
+
 <img v-if="!!imageUrl" :src="imageUrl">
 <div v-if="!imageUrl" class="img-placeholder"></div>
 
@@ -72,7 +73,9 @@ const Survey = {
     v-for="option of options" 
     @click="choose(option)" 
     :key="currentQuestion.id + option.id"
-  >{{ option.id }}</button>
+  >
+    <component :is="'icon-choice-' + option.icon"></component>
+  </button>
 </div>
 </template>
 `,
@@ -232,9 +235,12 @@ function auma({ id, questions, sendResultsTo }) {
     const vm = Vue.createApp(App)
       .component("survey", Survey)
       .component("results", Results)
-      .component("icon-play", IconPlay)
-      .component("icon-pause", IconPause)
-      .component("icon-replay", IconReplay)
+      .component("icon-play", Icons.IconPlay)
+      .component("icon-pause", Icons.IconPause)
+      .component("icon-replay", Icons.IconReplay)
+      .component("icon-choice-cat", Icons.IconChoiceCat)
+      .component("icon-choice-dog", Icons.IconChoiceDog)
+      .component("icon-choice-unknown", Icons.IconChoiceUnknown)
       .mount(el);
 
     vm.id = id;
@@ -243,7 +249,9 @@ function auma({ id, questions, sendResultsTo }) {
       new URLSearchParams(window.location.search).get("sendResultsTo") ||
       sendResultsTo;
     if (!vm.sendResultsTo) {
-      throw new Error("missing sendResultsTo parameter - please provide this via the survey config or query parameter")
+      throw new Error(
+        "missing sendResultsTo parameter - please provide this via the survey config or query parameter"
+      );
     }
     vm.start();
   };
