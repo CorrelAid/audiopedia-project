@@ -242,6 +242,9 @@ function auma({ id, questions, sendResultsTo }) {
     vm.sendResultsTo =
       new URLSearchParams(window.location.search).get("sendResultsTo") ||
       sendResultsTo;
+    if (!vm.sendResultsTo) {
+      throw new Error("missing sendResultsTo parameter - please provide this via the survey config or query parameter")
+    }
     vm.start();
   };
 
