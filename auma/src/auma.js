@@ -1,3 +1,5 @@
+import { IconPlay, IconPause, IconReplay } from "./icons";
+
 import "./auma.css";
 
 const App = {
@@ -50,11 +52,19 @@ const Survey = {
 <div class="play-bar">
   <button 
     v-if="showPlayPause" @click="playing ? pause() : play()"
-  >{{ playing ? 'pause' : 'play' }}</button>
+  >
+    <icon-pause v-if="playing"></icon-pause>
+    <icon-play v-if="!playing"></icon-play>
+  </button>
+  <button 
+    v-if="showReplayButton" @click="replay"
+  >
+    <icon-replay></icon-replay>
+  </button>
 </div>
 
-<img v-if="imageUrl !== undefined" :src="imageUrl">
-<div v-if="imageUrl == undefined" class="img-placeholder"></div>
+<img v-if="!!imageUrl" :src="imageUrl">
+<div v-if="!imageUrl" class="img-placeholder"></div>
 
 <div class="options">
   <button 
@@ -65,9 +75,6 @@ const Survey = {
   >{{ option.id }}</button>
 </div>
 </template>
-
-<pre>{{ JSON.stringify({playing, time}, null, 2) }}</pre>
-<pre>{{ JSON.stringify({results}, null, 2) }}</pre>
 `,
   props: {
     questions: Array,
@@ -77,6 +84,7 @@ const Survey = {
     return {
       currentQuestionIdx: -1,
       showPlayPause: false,
+      showReplayButton: false,
       playing: false,
       time: 0,
       imageUrl: undefined,
@@ -115,6 +123,7 @@ const Survey = {
     },
     ended() {
       this.showPlayPause = false;
+      this.showReplayButton = true;
       this.playing = false;
       const callback = (this.currentQuestion.callbacks || {}).END;
       if (callback) {
@@ -147,9 +156,12 @@ const Survey = {
       const question = this.questions[this.currentQuestionIdx];
       if (question.imageUrl) {
         this.imageUrl = question.imageUrl;
+      } else {
+        this.imageUrl = undefined;
       }
 
       this.showPlayPause = true;
+      this.showReplayButton = false;
       this.playing = false;
       this.time = 0;
     },
@@ -172,6 +184,10 @@ const Survey = {
     },
     submit() {
       this.$emit("submit", this.results);
+    },
+    replay() {
+      this.options = [];
+      this.setQuestionAndPlay(this.currentQuestionIdx);
     },
   },
 };
@@ -216,6 +232,9 @@ function auma({ id, questions, sendResultsTo }) {
     const vm = Vue.createApp(App)
       .component("survey", Survey)
       .component("results", Results)
+      .component("icon-play", IconPlay)
+      .component("icon-pause", IconPause)
+      .component("icon-replay", IconReplay)
       .mount(el);
 
     vm.id = id;

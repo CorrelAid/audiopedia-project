@@ -21,6 +21,11 @@
   min-height: 2rem;
 }
 
+.auma .play-bar button {
+  border: none;
+  background-color: transparent;
+}
+
 .auma img,
 .auma .img-placeholder {
   max-width: 100%;
