@@ -37,8 +37,6 @@ const App = {
   },
 };
 
-let surveyControls;
-
 const Survey = {
   template: `
 <template v-if="currentQuestion">
@@ -60,22 +58,27 @@ const Survey = {
 <audio 
   ref="audio" 
   :src="currentQuestion.audioUrl"
-  @timeupdate="tick"
-  @ended="ended"
+  @ended="onTrackEnded"
 ></audio>
 
 <img v-if="!!imageUrl" :src="imageUrl">
 <div v-if="!imageUrl" class="img-placeholder"></div>
 
 <div class="options">
-  <button 
-    class="option" 
-    v-for="option of options" 
-    @click="choose(option)" 
-    :key="currentQuestion.id + option.id"
-  >
-    <component :is="'icon-choice-' + option.icon"></component>
-  </button>
+  <template v-if="showOptions">
+    <button 
+      class="option" 
+      @click="choose('no')" 
+    >
+      <icon-choice-no/>
+    </button>
+    <button 
+      class="option" 
+      @click="choose('yes')" 
+    >
+      <icon-choice-yes/> 
+    </button>
+  </template>
 </div>
 </template>
 `,
@@ -88,11 +91,10 @@ const Survey = {
       currentQuestionIdx: -1,
       showPlayPause: false,
       showReplayButton: false,
+      showOptions: false,
       playing: false,
-      time: 0,
-      imageUrl: undefined,
-      options: [],
       results: [],
+      imageUrl: undefined,
     };
   },
   computed: {
@@ -101,38 +103,9 @@ const Survey = {
     },
   },
   mounted() {
-    surveyControls = {
-      play: this.play,
-      pause: this.pause,
-      setImageUrl: this.setImageUrl,
-      clearImageUrl: this.clearImageUrl,
-      setQuestion: this.setQuestion,
-      setQuestionAndPlay: this.setQuestionAndPlay,
-      setOptions: this.setOptions,
-      submit: this.submit,
-    };
     this.setQuestion(0);
   },
   methods: {
-    tick() {
-      const time = this.$refs.audio.currentTime;
-      for (let i = Math.ceil(this.time); i <= Math.floor(time); i++) {
-        const callback = (this.currentQuestion.callbacks || {})[i];
-        if (callback) {
-          callback(surveyControls);
-        }
-      }
-      this.time = time;
-    },
-    ended() {
-      this.showPlayPause = false;
-      this.showReplayButton = true;
-      this.playing = false;
-      const callback = (this.currentQuestion.callbacks || {}).END;
-      if (callback) {
-        callback(surveyControls);
-      }
-    },
     play() {
       this.$refs.audio.play();
       this.playing = true;
@@ -141,62 +114,51 @@ const Survey = {
       this.$refs.audio.pause();
       this.playing = false;
     },
-    setImageUrl(url) {
-      this.imageUrl = url;
-    },
-    clearImageUrl() {
-      this.imageUrl = undefined;
-    },
-    setQuestion(idOrIdx) {
-      if (typeof idOrIdx == "string") {
-        this.currentQuestionIdx = this.questions
-          .map((q) => q.id)
-          .indexOf(idOrIdx);
-      } else {
-        this.currentQuestionIdx = idOrIdx;
-      }
-
-      const question = this.questions[this.currentQuestionIdx];
-      if (question.imageUrl) {
-        this.imageUrl = question.imageUrl;
-      } else {
-        this.imageUrl = undefined;
-      }
-
-      this.showPlayPause = true;
-      this.showReplayButton = false;
+    onTrackEnded() {
       this.playing = false;
-      this.time = 0;
-    },
-    setQuestionAndPlay(idOrIdx) {
-      this.setQuestion(idOrIdx);
-      this.$nextTick(this.play);
-    },
-    setOptions(options) {
-      this.options = options;
-      this.pause();
       this.showPlayPause = false;
+      this.showReplayButton = true;
+      this.showOptions = true;
     },
     choose(option) {
-      this.options = [];
+      this.showOptions = false;
       this.results.push({
         question: this.currentQuestion.id,
-        option: option.id,
+        option: option,
       });
-      option.callback(surveyControls);
-    },
-    submit() {
-      this.$emit("submit", this.results);
+
+      if (!this.questions[this.currentQuestionIdx + 1]) {
+        this.$emit("submit", this.results);
+        return;
+      }
+
+      this.setQuestion(this.currentQuestionIdx + 1);
+      this.$nextTick(this.play);
     },
     replay() {
-      this.options = [];
-      this.setQuestionAndPlay(this.currentQuestionIdx);
+      this.$refs.audio.time = 0;
+      this.showPlayPause = true;
+      this.showReplayButton = false;
+      this.showOptions = false;
+      this.play();
+    },
+    setQuestion(idx) {
+      this.currentQuestionIdx = idx;
+      this.showPlayPause = true;
+      this.showReplayButton = false;
+      this.showOptions = false;
+
+      const question = this.questions[idx];
+      if (question.imageUrl) {
+        this.imageUrl = question.imageUrl;
+      }
     },
   },
 };
 
 const Results = {
   template: `
+<p>Your score is {{ score }}</p>
 <a :href="sendResultsURL" target="_blank">Send your results</a>
 <pre>{{ JSON.stringify({results}, null, 2) }}</pre>
 `,
@@ -205,12 +167,10 @@ const Results = {
     sendResultsTo: String,
     results: Array,
   },
-  mounted() {
-    // "proxy to object"
-    const results = JSON.parse(JSON.stringify(this.results));
-    console.log(results);
-  },
   computed: {
+    score() {
+      return this.results.filter((r) => r.option === "yes").length;
+    },
     sendResultsURL() {
       const text = JSON.stringify(
         { id: this.id, results: this.results },
@@ -224,7 +184,7 @@ const Results = {
   },
 };
 
-function auma({ id, questions, sendResultsTo }) {
+function auma({ id, questions }) {
   const vue = document.createElement("script");
   vue.src = "https://unpkg.com/vue@3";
 
@@ -244,14 +204,16 @@ function auma({ id, questions, sendResultsTo }) {
 
     vm.id = id;
     vm.questions = questions;
-    vm.sendResultsTo =
-      new URLSearchParams(window.location.search).get("sendResultsTo") ||
-      sendResultsTo;
+
+    vm.sendResultsTo = new URLSearchParams(window.location.search).get(
+      "sendResultsTo"
+    );
     if (!vm.sendResultsTo) {
-      throw new Error(
-        "missing sendResultsTo parameter - please provide this via the survey config or query parameter"
+      alert(
+        "missing sendResultsTo parameter - please provide this via the query parameter"
       );
     }
+
     vm.start();
   };
 
