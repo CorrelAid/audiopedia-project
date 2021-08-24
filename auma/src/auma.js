@@ -238,9 +238,8 @@ function auma({ id, questions, sendResultsTo }) {
       .component("icon-play", Icons.IconPlay)
       .component("icon-pause", Icons.IconPause)
       .component("icon-replay", Icons.IconReplay)
-      .component("icon-choice-cat", Icons.IconChoiceCat)
-      .component("icon-choice-dog", Icons.IconChoiceDog)
-      .component("icon-choice-unknown", Icons.IconChoiceUnknown)
+      .component("icon-choice-yes", Icons.IconChoiceYes)
+      .component("icon-choice-no", Icons.IconChoiceNo)
       .mount(el);
 
     vm.id = id;
