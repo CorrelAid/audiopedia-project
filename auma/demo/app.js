@@ -1,75 +1,208 @@
 auma({
-  id: "my-survey",
-  sendResultsTo: "12345678910", // put a real phone number here, or use query param
+  id: "srq-10",
   questions: [
     {
-      id: "cats-or-dogs",
-      audioUrl: "/mp3/do-you-prefer-cats-or-dogs.mp3",
-      imageUrl: "/img/cat-dog.jpg",
+      id: "slept-badly",
+      audioUrl: "/mp3/slept-badly.mp3",
       callbacks: {
         END: (controls) =>
           controls.setOptions([
             {
-              id: "cats",
-              icon: "yes",
-              callback: (controls) => controls.setQuestionAndPlay("hair-color"),
-            },
-            {
-              id: "dogs",
+              id: "no",
               icon: "no",
-              callback: (controls) => controls.setQuestionAndPlay("hair-color"),
+              callback: (controls) =>
+                controls.setQuestionAndPlay("crying-more"),
+            },
+            {
+              id: "yes",
+              icon: "yes",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("crying-more"),
             },
           ]),
       },
     },
     {
-      id: "hair-color",
-      audioUrl: "/mp3/what-is-your-hair-color.mp3",
-      imageUrl: "/img/hair-color.jpg",
+      id: "crying-more",
+      audioUrl: "/mp3/crying-more.mp3",
       callbacks: {
         END: (controls) =>
           controls.setOptions([
             {
-              id: "blonde",
-              icon: "yes",
+              id: "no",
+              icon: "no",
               callback: (controls) =>
-                controls.setQuestionAndPlay("feeling-stressed"),
+                controls.setQuestionAndPlay("not-enjoying-daily-activities"),
             },
             {
-              id: "red",
+              id: "yes",
               icon: "yes",
               callback: (controls) =>
-                controls.setQuestionAndPlay("feeling-stressed"),
-            },
-            {
-              id: "brown",
-              icon: "yes",
-              callback: (controls) =>
-                controls.setQuestionAndPlay("feeling-stressed"),
-            },
-            {
-              id: "black",
-              icon: "yes",
-              callback: (controls) =>
-                controls.setQuestionAndPlay("feeling-stressed"),
+                controls.setQuestionAndPlay("not-enjoying-daily-activities"),
             },
           ]),
       },
     },
     {
-      id: "feeling-stressed",
-      audioUrl: "/mp3/are-you-feeling-stressed.mp3",
-      imageUrl: "/img/stressed.jpg",
+      id: "not-enjoying-daily-activities",
+      audioUrl: "/mp3/not-enjoying-daily-activities.mp3",
       callbacks: {
         END: (controls) =>
           controls.setOptions([
             {
-              id: "not-stressed",
+              id: "no",
+              icon: "no",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("hard-to-make-decisions"),
+            },
+            {
+              id: "yes",
               icon: "yes",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("hard-to-make-decisions"),
+            },
+          ]),
+      },
+    },
+    {
+      id: "hard-to-make-decisions",
+      audioUrl: "/mp3/hard-to-make-decisions.mp3",
+      callbacks: {
+        END: (controls) =>
+          controls.setOptions([
+            {
+              id: "no",
+              icon: "no",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("daily-life-suffering"),
+            },
+            {
+              id: "yes",
+              icon: "yes",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("daily-life-suffering"),
+            },
+          ]),
+      },
+    },
+    {
+      id: "daily-life-suffering",
+      audioUrl: "/mp3/daily-life-suffering.mp3",
+      callbacks: {
+        END: (controls) =>
+          controls.setOptions([
+            {
+              id: "no",
+              icon: "no",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("playing-a-useful-part"),
+            },
+            {
+              id: "yes",
+              icon: "yes",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("playing-a-useful-part"),
+            },
+          ]),
+      },
+    },
+    {
+      id: "playing-a-useful-part",
+      audioUrl: "/mp3/playing-a-useful-part.mp3",
+      callbacks: {
+        END: (controls) =>
+          controls.setOptions([
+            {
+              id: "no",
+              icon: "no",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("ending-life"),
+            },
+            {
+              id: "yes",
+              icon: "yes",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("ending-life"),
+            },
+          ]),
+      },
+    },
+    {
+      id: "ending-life",
+      audioUrl: "/mp3/ending-life.mp3",
+      callbacks: {
+        END: (controls) =>
+          controls.setOptions([
+            {
+              id: "no",
+              icon: "no",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("feeling-tired"),
+            },
+            {
+              id: "yes",
+              icon: "yes",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("feeling-tired"),
+            },
+          ]),
+      },
+    },
+    {
+      id: "feeling-tired",
+      audioUrl: "/mp3/feeling-tired.mp3",
+      callbacks: {
+        END: (controls) =>
+          controls.setOptions([
+            {
+              id: "no",
+              icon: "no",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("having-headaches"),
+            },
+            {
+              id: "yes",
+              icon: "yes",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("having-headaches"),
+            },
+          ]),
+      },
+    },
+    {
+      id: "having-headaches",
+      audioUrl: "/mp3/having-headaches.mp3",
+      callbacks: {
+        END: (controls) =>
+          controls.setOptions([
+            {
+              id: "no",
+              icon: "no",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("poor-digestion"),
+            },
+            {
+              id: "yes",
+              icon: "yes",
+              callback: (controls) =>
+                controls.setQuestionAndPlay("poor-digestion"),
+            },
+          ]),
+      },
+    },
+    {
+      id: "poor-digestion",
+      audioUrl: "/mp3/poor-digestion.mp3",
+      callbacks: {
+        END: (controls) =>
+          controls.setOptions([
+            {
+              id: "no",
+              icon: "no",
               callback: (controls) => controls.submit(),
             },
             {
-              id: "very-stressed",
+              id: "yes",
               icon: "yes",
               callback: (controls) => controls.submit(),
             },
