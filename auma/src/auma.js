@@ -169,14 +169,12 @@ const Results = {
   },
   computed: {
     score() {
-      return this.results.filter((r) => r.option === "yes").length;
+      return `${this.results.filter((r) => r.option === "yes").length}/${
+        this.results.length
+      }`;
     },
     sendResultsURL() {
-      const text = JSON.stringify(
-        { id: this.id, results: this.results },
-        null,
-        2
-      );
+      const text = JSON.stringify({ id: this.id, score: this.score }, null, 2);
       return `https://api.whatsapp.com/send?phone=${
         this.sendResultsTo
       }&text=${encodeURIComponent(text)}`;
