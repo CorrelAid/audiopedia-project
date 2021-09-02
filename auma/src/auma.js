@@ -41,6 +41,8 @@ const Survey = {
   template: `
 <template v-if="currentQuestion">
 
+<p>{{ currentQuestionIdx of questions.length}}</p>
+
 <div class="play-bar">
   <button 
     v-if="showPlayPause" @click="playing ? pause() : play()"
@@ -88,7 +90,7 @@ const Survey = {
   emits: ["submit"],
   data() {
     return {
-      currentQuestionIdx: -1,
+      currentQuestionIdx: -0,
       showPlayPause: false,
       showReplayButton: false,
       showOptions: false,
