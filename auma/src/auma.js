@@ -37,7 +37,7 @@ const App = {
 
 function auma(config) {
   const vue = document.createElement("script");
-  vue.src = "https://unpkg.com/vue@3";
+  vue.src = VUE_CDN_URL;
 
   vue.onload = () => {
     const el = document.createElement("div");

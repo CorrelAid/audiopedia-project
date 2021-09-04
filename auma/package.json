@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "start": "concurrently npm:build:watch npm:serve-demo",
-    "build": "webpack",
-    "build:watch": "webpack -w",
+    "start": "concurrently npm:build:watch-dev npm:serve-demo",
+    "build": "webpack -c webpack.config.prod.js",
+    "build:watch-dev": "webpack -w -c webpack.config.dev.js",
     "serve-demo": "http-server ./demo",
     "deploy-demo": "npm run build && surge ./demo auma-demo.surge.sh",
     "fmt": "prettier --write ."
