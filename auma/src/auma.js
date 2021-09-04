@@ -39,8 +39,6 @@ const App = {
 
 const Survey = {
   template: `
-<template v-if="currentQuestion">
-
 <div class="play-bar">
   <button 
     v-if="showPlayPause" @click="playing ? pause() : play()"
@@ -78,9 +76,14 @@ const Survey = {
     >
       <icon-choice-yes/> 
     </button>
+    <button 
+      class="option" 
+      @click="choose('skip')" 
+    >
+      <icon-choice-skip/> 
+    </button>
   </template>
 </div>
-</template>
 `,
   props: {
     questions: Array,
@@ -88,7 +91,7 @@ const Survey = {
   emits: ["submit"],
   data() {
     return {
-      currentQuestionIdx: -1,
+      currentQuestionIdx: 0,
       showPlayPause: false,
       showReplayButton: false,
       showOptions: false,
@@ -198,6 +201,7 @@ function auma({ id, questions }) {
       .component("icon-replay", Icons.IconReplay)
       .component("icon-choice-yes", Icons.IconChoiceYes)
       .component("icon-choice-no", Icons.IconChoiceNo)
+      .component("icon-choice-skip", Icons.IconChoiceSkip)
       .mount(el);
 
     vm.id = id;
