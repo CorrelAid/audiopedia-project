@@ -1,12 +1,26 @@
-.survey .options {
+.survey {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.survey__options {
+  margin-top: 4rem;
   width: 100%;
-  min-height: 48px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 
-.survey .options button {
+.survey__options.disabled {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.survey__options-button {
   border: none;
   background-color: transparent;
 }

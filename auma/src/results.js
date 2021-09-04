@@ -1,13 +1,16 @@
 import { Audio } from "./audio";
 
+import "./results.css";
+
 export const Results = {
   components: {
     "app-audio": Audio,
   },
   template: `
-<app-audio :url="audioUrl"/>
-<a :href="sendResultsUrl" target="_blank">Send your results</a>
-  `,
+<div class="results">
+  <app-audio :url="audioUrl"/>
+  <a :href="sendResultsUrl" target="_blank" style="margin-top: 4rem;">Send your results</a>
+</div>`,
   props: {
     config: Object,
     results: Array,
