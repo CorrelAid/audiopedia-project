@@ -12,35 +12,3 @@
 .auma * {
   box-sizing: border-box;
 }
-
-.auma > * {
-  margin-top: 0;
-}
-
-.auma > * + * {
-  margin-top: 1.5rem;
-}
-
-.auma img,
-.auma .img-placeholder {
-  max-width: 100%;
-  width: 300px;
-  aspect-ratio: 1;
-}
-
-.auma .img-placeholder {
-  background-color: #eee;
-}
-
-.auma .options {
-  width: 100%;
-  min-height: 48px;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.auma .options button {
-  border: none;
-  background-color: transparent;
-}

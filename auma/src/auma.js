@@ -1,7 +1,5 @@
 import { Survey } from "./survey";
 import { Results } from "./results";
-import { Audio } from "./audio";
-import * as Icons from "./icons";
 
 import "./auma.css";
 
@@ -51,10 +49,6 @@ function auma({ id, questions }) {
     const vm = Vue.createApp(App)
       .component("survey", Survey)
       .component("results", Results)
-      .component("app-audio", Audio)
-      .component("icon-choice-yes", Icons.IconChoiceYes)
-      .component("icon-choice-no", Icons.IconChoiceNo)
-      .component("icon-choice-skip", Icons.IconChoiceSkip)
       .mount(el);
 
     vm.id = id;

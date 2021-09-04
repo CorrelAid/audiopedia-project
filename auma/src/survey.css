@@ -1,0 +1,12 @@
+.survey .options {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.survey .options button {
+  border: none;
+  background-color: transparent;
+}
