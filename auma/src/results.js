@@ -25,7 +25,7 @@ export const Results = {
       for (let i = 0; i < this.config.results.length; i++) {
         if (
           this.numberYes >= this.config.results[i].from &&
-          this.numberYes <= this.config.results[i].from
+          this.numberYes <= this.config.results[i].to
         ) {
           return this.config.results[i].audioUrl;
         }
