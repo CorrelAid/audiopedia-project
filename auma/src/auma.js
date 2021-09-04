@@ -8,22 +8,19 @@ const App = {
 <div class="auma">
   <survey 
     v-if="view == 'survey'" 
-    :questions="questions" 
+    :questions="config.questions" 
     @submit="handleSurveySubmit"
   ></survey>
   <results 
     v-if="view == 'results'" 
-    :id="id"
-    :sendResultsTo="sendResultsTo" 
+    :config="config"
     :results="results"
   ></results>
 </div>`,
   data() {
     return {
+      config: undefined,
       view: "init",
-      id: undefined,
-      sendResultsTo: undefined,
-      questions: [],
       results: [],
     };
   },
@@ -38,7 +35,7 @@ const App = {
   },
 };
 
-function auma({ id, questions }) {
+function auma(config) {
   const vue = document.createElement("script");
   vue.src = "https://unpkg.com/vue@3";
 
@@ -51,18 +48,17 @@ function auma({ id, questions }) {
       .component("results", Results)
       .mount(el);
 
-    vm.id = id;
-    vm.questions = questions;
-
-    vm.sendResultsTo = new URLSearchParams(window.location.search).get(
+    const sendResultsTo = new URLSearchParams(window.location.search).get(
       "sendResultsTo"
     );
-    if (!vm.sendResultsTo) {
+    if (!sendResultsTo) {
       alert(
         "missing sendResultsTo parameter - please provide this via the query parameter"
       );
     }
+    config = { ...config, sendResultsTo };
 
+    vm.config = config;
     vm.start();
   };
 

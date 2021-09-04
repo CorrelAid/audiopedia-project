@@ -1,25 +1,43 @@
+import { Audio } from "./audio";
+
 export const Results = {
+  components: {
+    "app-audio": Audio,
+  },
   template: `
-  <p>Your score is {{ score }}</p>
-  <a :href="sendResultsURL" target="_blank">Send your results</a>
-  <pre>{{ JSON.stringify({results}, null, 2) }}</pre>
+<app-audio :url="audioUrl"/>
+<a :href="sendResultsUrl" target="_blank">Send your results</a>
   `,
   props: {
-    id: String,
-    sendResultsTo: String,
+    config: Object,
     results: Array,
   },
+  mounted() {
+    if (this.results.length != this.config.questions.length) {
+      throw new Error("results and questions have different length");
+    }
+  },
   computed: {
-    score() {
-      return `${this.results.filter((r) => r.option === "yes").length}/${
-        this.results.length
-      }`;
+    numberYes() {
+      return this.results.filter((r) => r.option === "yes").length;
     },
-    sendResultsURL() {
-      const text = JSON.stringify({ id: this.id, score: this.score }, null, 2);
-      return `https://api.whatsapp.com/send?phone=${
-        this.sendResultsTo
-      }&text=${encodeURIComponent(text)}`;
+    audioUrl() {
+      for (let i = 0; i < this.config.results.length; i++) {
+        if (
+          this.numberYes >= this.config.results[i].from &&
+          this.numberYes <= this.config.results[i].from
+        ) {
+          return this.config.results[i].audioUrl;
+        }
+      }
+      throw new Error("could not find results audio");
+    },
+    sendResultsUrl() {
+      const text = encodeURIComponent(`
+My survey score (${this.config.id}): 
+${this.numberYes}/${this.results.length}
+`);
+      return `https://api.whatsapp.com/send?phone=${this.config.sendResultsTo}&text=${text}`;
     },
   },
 };

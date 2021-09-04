@@ -42,4 +42,21 @@ auma({
       audioUrl: "/mp3/poor-digestion.mp3",
     },
   ],
+  results: [
+    {
+      from: 0,
+      to: 3,
+      audioUrl: "/mp3/result_0-3.mp3",
+    },
+    {
+      from: 4,
+      to: 6,
+      audioUrl: "/mp3/result_4-6.mp3",
+    },
+    {
+      from: 7,
+      to: 10,
+      audioUrl: "/mp3/result_7-10.mp3",
+    },
+  ],
 });
