@@ -21,7 +21,7 @@ npm start
 
 ## The demo
 
-The demo lives in the `demo/` folder. The demo survey is configured via `app.js`. Apart from adding image and audio files this configuration file is the only file a survey implementer needs to consider.
+The demo lives in the `demo/` folder. The demo survey is configured via `app.js`. Apart from adding audio files this configuration file is the only file a survey implementer needs to consider.
 
 ## The framework
 

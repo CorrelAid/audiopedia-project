@@ -6,9 +6,6 @@ export const Survey = {
   @ready="onAudioReady"
   @ended="onAudioEnded" 
   @replay="onAudioReplay"/>
-  
-<img v-if="!!imageUrl" :src="imageUrl">
-<div v-if="!imageUrl" class="img-placeholder"></div>
 
 <div class="options">
   <template v-if="showOptions">
@@ -42,16 +39,12 @@ export const Survey = {
       currentQuestionIdx: 0,
       showOptions: false,
       results: [],
-      imageUrl: undefined,
     };
   },
   computed: {
     currentQuestion() {
       return this.questions[this.currentQuestionIdx];
     },
-  },
-  mounted() {
-    this.setQuestion(0);
   },
   methods: {
     choose(option) {
@@ -82,11 +75,6 @@ export const Survey = {
     setQuestion(idx) {
       this.currentQuestionIdx = idx;
       this.showOptions = false;
-
-      const question = this.questions[idx];
-      if (question.imageUrl) {
-        this.imageUrl = question.imageUrl;
-      }
     },
   },
 };
