@@ -1,0 +1,8 @@
+.audio {
+  min-height: 48px;
+}
+
+.audio button {
+  border: none;
+  background-color: transparent;
+}

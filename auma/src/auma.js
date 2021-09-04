@@ -1,5 +1,6 @@
 import { Survey } from "./survey";
 import { Results } from "./results";
+import { Audio } from "./audio";
 import * as Icons from "./icons";
 
 import "./auma.css";
@@ -50,6 +51,7 @@ function auma({ id, questions }) {
     const vm = Vue.createApp(App)
       .component("survey", Survey)
       .component("results", Results)
+      .component("app-audio", Audio)
       .component("icon-play", Icons.IconPlay)
       .component("icon-pause", Icons.IconPause)
       .component("icon-replay", Icons.IconReplay)

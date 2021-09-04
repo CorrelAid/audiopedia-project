@@ -21,15 +21,6 @@
   margin-top: 1.5rem;
 }
 
-.auma .play-bar {
-  min-height: 48px;
-}
-
-.auma .play-bar button {
-  border: none;
-  background-color: transparent;
-}
-
 .auma img,
 .auma .img-placeholder {
   max-width: 100%;

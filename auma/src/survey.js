@@ -1,50 +1,37 @@
 export const Survey = {
   template: `
-  <div class="play-bar">
+<app-audio 
+  ref="audio"
+  :url="currentQuestion.audioUrl" 
+  @ready="onAudioReady"
+  @ended="onAudioEnded" 
+  @replay="onAudioReplay"/>
+  
+<img v-if="!!imageUrl" :src="imageUrl">
+<div v-if="!imageUrl" class="img-placeholder"></div>
+
+<div class="options">
+  <template v-if="showOptions">
     <button 
-      v-if="showPlayPause" @click="playing ? pause() : play()"
+      class="option" 
+      @click="choose('no')" 
     >
-      <icon-pause v-if="playing"></icon-pause>
-      <icon-play v-if="!playing"></icon-play>
+      <icon-choice-no/>
     </button>
     <button 
-      v-if="showReplayButton" @click="replay"
+      class="option" 
+      @click="choose('yes')" 
     >
-      <icon-replay></icon-replay>
+      <icon-choice-yes/> 
     </button>
-  </div>
-  
-  <audio 
-    ref="audio" 
-    :src="currentQuestion.audioUrl"
-    @ended="onTrackEnded"
-  ></audio>
-  
-  <img v-if="!!imageUrl" :src="imageUrl">
-  <div v-if="!imageUrl" class="img-placeholder"></div>
-  
-  <div class="options">
-    <template v-if="showOptions">
-      <button 
-        class="option" 
-        @click="choose('no')" 
-      >
-        <icon-choice-no/>
-      </button>
-      <button 
-        class="option" 
-        @click="choose('yes')" 
-      >
-        <icon-choice-yes/> 
-      </button>
-      <button 
-        class="option" 
-        @click="choose('skip')" 
-      >
-        <icon-choice-skip/> 
-      </button>
-    </template>
-  </div>
+    <button 
+      class="option" 
+      @click="choose('skip')" 
+    >
+      <icon-choice-skip/> 
+    </button>
+  </template>
+</div>
   `,
   props: {
     questions: Array,
@@ -53,10 +40,7 @@ export const Survey = {
   data() {
     return {
       currentQuestionIdx: 0,
-      showPlayPause: false,
-      showReplayButton: false,
       showOptions: false,
-      playing: false,
       results: [],
       imageUrl: undefined,
     };
@@ -70,20 +54,6 @@ export const Survey = {
     this.setQuestion(0);
   },
   methods: {
-    play() {
-      this.$refs.audio.play();
-      this.playing = true;
-    },
-    pause() {
-      this.$refs.audio.pause();
-      this.playing = false;
-    },
-    onTrackEnded() {
-      this.playing = false;
-      this.showPlayPause = false;
-      this.showReplayButton = true;
-      this.showOptions = true;
-    },
     choose(option) {
       this.showOptions = false;
       this.results.push({
@@ -97,19 +67,20 @@ export const Survey = {
       }
 
       this.setQuestion(this.currentQuestionIdx + 1);
-      this.$nextTick(this.play);
     },
-    replay() {
-      this.$refs.audio.time = 0;
-      this.showPlayPause = true;
-      this.showReplayButton = false;
+    onAudioReady() {
+      if (this.currentQuestionIdx > 0) {
+        this.$refs.audio.play();
+      }
+    },
+    onAudioEnded() {
+      this.showOptions = true;
+    },
+    onAudioReplay() {
       this.showOptions = false;
-      this.play();
     },
     setQuestion(idx) {
       this.currentQuestionIdx = idx;
-      this.showPlayPause = true;
-      this.showReplayButton = false;
       this.showOptions = false;
 
       const question = this.questions[idx];
