@@ -43,12 +43,14 @@ export const Survey = {
     <button 
       class="survey__options-button" 
       @click="choose('no')" 
+      :disabled="optionsDisabled"
     >
       <icon-choice-no/>
     </button>
     <button 
       class="survey__options-button" 
       @click="choose('yes')" 
+      :disabled="optionsDisabled"
     >
       <icon-choice-yes/> 
     </button>
@@ -58,6 +60,7 @@ export const Survey = {
     <button 
       class="survey__options-button" 
       @click="choose('skip')" 
+      :disabled="optionsDisabled"
     >
       <icon-choice-skip/> 
     </button>
