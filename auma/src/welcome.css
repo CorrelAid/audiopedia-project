@@ -1,0 +1,15 @@
+.welcome {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome__done {
+  border: none;
+  background-color: transparent;
+  margin-top: 3rem;
+  transition: all 3s;
+}

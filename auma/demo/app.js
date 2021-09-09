@@ -1,5 +1,8 @@
 auma({
   id: "srq-10",
+  welcome: {
+    audioUrl: "/mp3/welcome.mp3",
+  },
   questions: [
     {
       id: "slept-badly",

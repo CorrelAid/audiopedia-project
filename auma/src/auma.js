@@ -1,3 +1,4 @@
+import { Welcome } from "./welcome";
 import { Survey } from "./survey";
 import { Results } from "./results";
 
@@ -6,6 +7,11 @@ import "./auma.css";
 const App = {
   template: `
 <div class="auma">
+  <welcome 
+    v-if="view == 'welcome'" 
+    :config="config"
+    @done="handleWelcomeDone"
+  ></welcome>
   <survey 
     v-if="view == 'survey'" 
     :questions="config.questions" 
@@ -26,6 +32,9 @@ const App = {
   },
   methods: {
     start() {
+      this.view = "welcome";
+    },
+    handleWelcomeDone() {
       this.view = "survey";
     },
     handleSurveySubmit(results) {
@@ -44,6 +53,7 @@ function auma(config) {
     document.body.append(el);
 
     const vm = Vue.createApp(App)
+      .component("welcome", Welcome)
       .component("survey", Survey)
       .component("results", Results)
       .mount(el);
