@@ -1,8 +1,10 @@
 .audio {
-  min-height: 48px;
+  width: 120px;
+  transition: all 3s;
 }
 
 .audio__button {
+  display: block;
   border: none;
   background-color: transparent;
 }

@@ -19,10 +19,13 @@ export const Results = {
   },
   template: `
 <div class="results">
-  <app-audio :url="audioUrl" @ended="audioEnded = true"/>
+  <app-audio 
+    :url="audioUrl" 
+    :style="{width: audioEnded ? '60px' : '240px'}"
+    @ended="audioEnded = true"/>
   <a 
     :href="sendResultsUrl" target="_blank" class="results__send" 
-    :style="{marginTop: audioEnded ? '6rem' : '3rem', width: audioEnded ? '240px' : '60px'}">
+    :style="{width: audioEnded ? '240px' : '60px'}">
     <icon-send-results/>
   </a>
 </div>`,

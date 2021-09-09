@@ -8,5 +8,6 @@
 }
 
 .results__send {
+  margin-top: 3rem;
   transition: all 3s;
 }
