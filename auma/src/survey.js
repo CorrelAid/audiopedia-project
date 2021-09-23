@@ -34,7 +34,7 @@ export const Survey = {
   template: `
 <div class="survey">
 
-  <p>{{ currentQuestionIdx of questions.length}}</p>
+  <p>{{ currentQuestionIdx} of {questions.length}}</p>
 
   <app-audio 
     ref="audio"
