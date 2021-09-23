@@ -29,15 +29,20 @@ export const Survey = {
     "icon-choice-no": IconChoiceNo,
     "icon-choice-skip": IconChoiceSkip,
     "app-audio": Audio,
+    
   },
   template: `
 <div class="survey">
+
+  <p>{{ currentQuestionIdx of questions.length}}</p>
+
   <app-audio 
     ref="audio"
     :url="currentQuestion.audioUrl" 
     @ready="onAudioReady"
     @ended="onAudioEnded" 
     @replay="onAudioReplay"/>
+  
 
   <div class="survey__options" :class="{disabled: optionsDisabled}">
     <button 
