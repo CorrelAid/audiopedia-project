@@ -23,9 +23,12 @@ export const Results = {
     :url="audioUrl" 
     :style="{width: audioEnded ? '60px' : '240px'}"
     @ended="audioEnded = true"/>
-  <a 
-    :href="sendResultsUrl" target="_blank" class="results__send" 
-    :style="{width: audioEnded ? '240px' : '60px'}">
+  <a
+    :href="sendResultsUrl"
+    target="_blank"
+    class="results__send" 
+    :style="{width: audioEnded ? '240px' : '60px'}"
+    @click="trackSendResults">
     <icon-send-results/>
   </a>
 </div>`,
@@ -57,11 +60,15 @@ export const Results = {
       throw new Error("could not find results audio");
     },
     sendResultsUrl() {
-      const text = encodeURIComponent(`
-My survey score (${this.config.id}): 
-${this.numberYes}/${this.results.length}
-`);
+      const text = encodeURIComponent(
+        `My survey score (${this.config.id}): ${this.numberYes}/${this.results.length}`
+      );
       return `https://api.whatsapp.com/send?phone=${this.config.sendResultsTo}&text=${text}`;
+    },
+  },
+  methods: {
+    trackSendResults() {
+      this.config.trackFn("SEND_RESULTS");
     },
   },
 };

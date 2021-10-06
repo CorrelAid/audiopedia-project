@@ -14,6 +14,7 @@ const App = {
   ></welcome>
   <survey 
     v-if="view == 'survey'" 
+    :config="config"
     :questions="config.questions" 
     @submit="handleSurveySubmit"
   ></survey>
@@ -33,18 +34,23 @@ const App = {
   methods: {
     start() {
       this.view = "welcome";
+      this.config.trackFn("PAGE_WELCOME");
     },
     handleWelcomeDone() {
       this.view = "survey";
+      this.config.trackFn("PAGE_SURVEY");
     },
     handleSurveySubmit(results) {
       this.results = results;
       this.view = "results";
+      this.config.trackFn("PAGE_RESULTS");
     },
   },
 };
 
 function auma(config) {
+  config.trackFn = config.trackFn || function () {};
+
   const vue = document.createElement("script");
   vue.src = VUE_CDN_URL;
 
