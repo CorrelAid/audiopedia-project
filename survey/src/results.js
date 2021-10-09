@@ -61,7 +61,7 @@ export const Results = {
     },
     sendResultsUrl() {
       const text = encodeURIComponent(
-        `My survey score (${this.config.id}): ${this.numberYes}/${this.results.length}`
+        `My survey result (${this.config.id}): ${this.numberYes}/${this.results.length}`
       );
       return `https://api.whatsapp.com/send?phone=${this.config.sendResultsTo}&text=${text}`;
     },
