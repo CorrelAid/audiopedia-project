@@ -51,6 +51,8 @@ const App = {
 function survey(config) {
   config.trackFn = config.trackFn || function () {};
 
+  document.title = "Survey | " + config.id;
+
   const vue = document.createElement("script");
   vue.src = VUE_CDN_URL;
 
