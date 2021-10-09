@@ -7,9 +7,16 @@
   align-items: center;
 }
 
+.survey__progress {
+  margin-top: 4rem;
+  width: 100%;
+  padding: 0 2rem;
+}
+
 .survey__options {
   margin-top: 4rem;
   width: 100%;
+  padding: 0 2rem;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
