@@ -2,11 +2,11 @@ import { Welcome } from "./welcome";
 import { Survey } from "./survey";
 import { Results } from "./results";
 
-import "./auma.css";
+import "./app.css";
 
 const App = {
   template: `
-<div class="auma">
+<div class="app">
   <welcome 
     v-if="view == 'welcome'" 
     :config="config"
@@ -48,7 +48,7 @@ const App = {
   },
 };
 
-function auma(config) {
+function survey(config) {
   config.trackFn = config.trackFn || function () {};
 
   const vue = document.createElement("script");
@@ -81,4 +81,4 @@ function auma(config) {
   document.head.append(vue);
 }
 
-window.auma = auma;
+window.survey = survey;

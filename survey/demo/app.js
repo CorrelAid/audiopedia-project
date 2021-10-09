@@ -1,4 +1,4 @@
-auma({
+survey({
   id: "srq-10",
   welcome: {
     audioUrl: "/mp3/01.mp3",

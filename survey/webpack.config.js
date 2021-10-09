@@ -14,9 +14,9 @@ module.exports = function config(env) {
 
   return {
     mode: env,
-    entry: "./src/auma.js",
+    entry: "./src/app.js",
     output: {
-      filename: "auma.js",
+      filename: "survey.js",
       path: path.resolve(__dirname, "demo/dist"),
     },
     module: {
