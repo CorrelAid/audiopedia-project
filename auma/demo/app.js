@@ -62,4 +62,8 @@ auma({
       audioUrl: "/mp3/result_7-10.mp3",
     },
   ],
+  trackFn: function (event, extraData = {}) {
+    console.log({ event, extraData });
+    // window.splitbee.track(event, extraData);
+  },
 });

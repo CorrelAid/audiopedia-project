@@ -69,6 +69,7 @@ export const Survey = {
   `,
   props: {
     questions: Array,
+    config: Object,
   },
   emits: ["submit"],
   data() {
@@ -91,7 +92,16 @@ export const Survey = {
         option: option,
       });
 
+      this.config.trackFn(`ANSWER_QUESTION_${this.currentQuestionIdx + 1}`, {
+        question: this.currentQuestion.id,
+        answer: option,
+      });
+
       if (!this.questions[this.currentQuestionIdx + 1]) {
+        this.config.trackFn("COMPLETE_SURVEY", {
+          score: this.results.filter((r) => r.option === "yes").length,
+          outOf: this.results.length,
+        });
         this.$emit("submit", this.results);
         return;
       }
